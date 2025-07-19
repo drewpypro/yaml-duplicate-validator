@@ -18,6 +18,6 @@ rules:
         - 10.12.1.1/32
         - 10.15.1.1/32
     protocol: tcp
-    port: 69
+    port: 443
     appid: ssl
     url: https://api.datadoghq.com

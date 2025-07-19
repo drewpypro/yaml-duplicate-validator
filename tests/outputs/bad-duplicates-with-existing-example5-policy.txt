@@ -1,3 +1,4 @@
+🏛️ Duplicates detected in submitted policy
 
 # Submitted policy rule index #1 matches submitted policy index #2
 ```yaml
