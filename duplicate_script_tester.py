@@ -35,7 +35,6 @@ def run_test(request_file):
         return "PASS"
     else:
         print(f"\033[91m[FAIL]\033[0m {os.path.basename(request_file)}")
-        # Print diff for reference, but do not put anything in the table
         import difflib
         diff = "\n".join(difflib.unified_diff(
             expected_output.splitlines(),
@@ -68,7 +67,6 @@ def main():
     print("==============================================")
     print(f"Total: {total} | Passed: {passed} | Failed: {failed}")
 
-    # Pretty table summary: only Test Case + Status
     print("\nTest Results:")
     col1 = "Test Case"
     col2 = "Status"
