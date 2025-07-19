@@ -52,10 +52,8 @@ def check_duplicates_within_request(policy, ip_direction_key):
     dupe_full_tuple = set()
     found = False
 
-    # Mapping: rule idx -> set of matching indices
     matches = defaultdict(set)
 
-    # Track full tuple matches
     full_tuple_to_idxs = defaultdict(list)
     for idx, rule in enumerate(rules):
         key = full_tuple_key(rule, ip_direction_key)
@@ -69,7 +67,6 @@ def check_duplicates_within_request(policy, ip_direction_key):
                         matches[i].add(j)
                 dupe_full_tuple.add(i)
 
-    # Track partial (IP-level) dupes
     tuple_to_rules = defaultdict(list)
     for idx, rule in enumerate(rules):
         for ip in rule[ip_direction_key]["ips"]:
@@ -92,7 +89,7 @@ def check_duplicates_within_request(policy, ip_direction_key):
                 continue
             highlight_all = idx in dupe_full_tuple
             highlight_ips = set(rules[idx][ip_direction_key]['ips']) if highlight_all else dupe_ip_map[idx]
-            has_any_highlight = highlight_all or highlight_ips  # either full or partial
+            has_any_highlight = highlight_all or highlight_ips
 
             if idx in matches and matches[idx]:
                 match_indices = sorted(matches[idx])
@@ -102,11 +99,10 @@ def check_duplicates_within_request(policy, ip_direction_key):
                 )
                 out.append(header)
             elif has_any_highlight:
-                # Single-rule dupe (only itself)
                 header = f"# Submitted policy rule index #{idx+1} (duplicate values within rule)"
                 out.append(header)
             else:
-                continue  # no match, no dupe, skip
+                continue
 
             out.append("```yaml")
             out.append(format_rule_yaml(
@@ -141,8 +137,8 @@ def check_duplicates_against_existing(request_policy, existing_policy, ip_direct
     highlight_all_fields_sub = set()
     highlight_all_fields_exist = set()
 
-    # NEW: Track which submitted rule matches which existing rule indices
-    submitted_matches = defaultdict(set)  # <----- ADD THIS LINE
+
+    submitted_matches = defaultdict(set)
 
     for sub_key, sub_idxs in submitted_full_tuples.items():
         if sub_key in existing_full_tuples:
@@ -152,10 +148,9 @@ def check_duplicates_against_existing(request_policy, existing_policy, ip_direct
             for eidx in existing_full_tuples[sub_key]:
                 highlight_all_fields_exist.add(eidx)
                 existing_blocks.add(eidx)
-            # NEW: mark full-tuple matches as matches for both sides
             for sidx in sub_idxs:
                 for eidx in existing_full_tuples[sub_key]:
-                    submitted_matches[sidx].add(eidx)  # <--- ADD THIS
+                    submitted_matches[sidx].add(eidx)
 
     for req_idx, rule in enumerate(request_policy.get("rules", [])):
         for key in extract_5tuple(rule, ip_direction_key):
@@ -165,16 +160,14 @@ def check_duplicates_against_existing(request_policy, existing_policy, ip_direct
                 for ex_idx, _ in existing_map[key]:
                     existing_dupe[ex_idx].add(key[0])
                     existing_blocks.add(ex_idx)
-                    submitted_matches[req_idx].add(ex_idx)  # <--- ADD THIS
+                    submitted_matches[req_idx].add(ex_idx)
 
     if submitted_blocks or existing_blocks:
         out = [f"\n\n🏛️ Duplicates detected in existing policy {existing_filename}\n"]
-        # Change: when printing each submitted rule, show which existing rule(s) it matches.
         for idx in sorted(submitted_blocks):
             rule = request_policy["rules"][idx]
             highlight_ips = set(rule[ip_direction_key]["ips"]) if idx in highlight_all_fields_sub else submitted_dupe[idx]
             highlight_all = idx in highlight_all_fields_sub
-            # NEW: If there are matches, print them in the header.
             if idx in submitted_matches and submitted_matches[idx]:
                 match_indices = ", ".join([f"#{i+1}" for i in sorted(submitted_matches[idx])])
                 out.append(f"# Submitted policy rule index #{idx+1} matches existing policy rule index {match_indices}")
@@ -216,14 +209,11 @@ def main():
     service_type = request_policy["security_group"].get("serviceType", "")
     ip_direction_key = "source" if service_type == "privatelink-consumer" else "destination"
 
-    # CHANGED: DO NOT exit after within-policy dupe. Print and keep going.
     has_within_dupe, within_output = check_duplicates_within_request(request_policy, ip_direction_key)
     if has_within_dupe:
         print(within_output)
-        # DO NOT sys.exit(0); just keep going!
 
-    # Check against existing policy (always, if provided)
-    found_dupe = has_within_dupe  # keep track if any dupes found
+    found_dupe = has_within_dupe
     if existing_file:
         existing_policy = load_yaml_file(existing_file)
         has_ext_dupe, ext_output = check_duplicates_against_existing(
