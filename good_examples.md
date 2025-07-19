@@ -54,7 +54,7 @@ rules:
     port: 443
     appid: ssl
     url: https://api.datadoghq.com
-	
+  
 ```
 
 ## Output
@@ -92,7 +92,7 @@ rules:
     port: 69
     appid: mongodb
     url: https://api.datadoghq.com
-	
+  
 ```
 
 ## Output
@@ -129,7 +129,7 @@ rules:
     port: 69
     appid: ssl
     url: https://api.datadoghq.com
-	
+  
 ```
 
 ## Output
@@ -166,7 +166,7 @@ rules:
     port: 69
     appid: ssl
     url: https://api.datadoghq2.com
-	
+  
 ```
 
 ## Output

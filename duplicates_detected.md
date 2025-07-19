@@ -26,16 +26,16 @@ rules:
 🏛️ Duplicates detected in submitted policy
 
 ```yaml
-		- request_id: RQ-001
-		  source:
-			ips:
-	>>    - 10.11.1.1/32
-			  - 10.12.1.1/32
-	>>    - 10.11.1.1/32
-		  protocol: tcp
-		  port: 69
-		  appid: ssl
-		  url: https://api.datadoghq.com	  
+    - request_id: RQ-001
+      source:
+      ips:
+  >>    - 10.11.1.1/32
+        - 10.12.1.1/32
+  >>    - 10.11.1.1/32
+      protocol: tcp
+      port: 69
+      appid: ssl
+      url: https://api.datadoghq.com    
 ```
 
 # Duplicates in separate rules within request example#2
@@ -67,34 +67,34 @@ rules:
     port: 69
     appid: ssl
     url: https://api.datadoghq.com
-	
+  
 ```
 
 ## Output
 
 🏛️ Duplicates detected in submitted policy
 
-	```yaml
-	  rules:
-		- request_id: RQ-001
-		  source:
-			ips:
-			  - 10.12.1.1/32
-	>>    - 10.13.1.1/32
-		  protocol: tcp
-		  port: 69
-		  appid: ssl
-		  url: https://api.datadoghq.com
-		- request_id: RQ-002
-		  source:
-			ips:
-			  - 10.11.1.1/32
-	>>    - 10.13.1.1/32
-		  protocol: tcp
-		  port: 69
-		  appid: ssl
-		  url: https://api.datadoghq.com
-	```
+  ```yaml
+    rules:
+    - request_id: RQ-001
+      source:
+      ips:
+        - 10.12.1.1/32
+  >>    - 10.13.1.1/32
+      protocol: tcp
+      port: 69
+      appid: ssl
+      url: https://api.datadoghq.com
+    - request_id: RQ-002
+      source:
+      ips:
+        - 10.11.1.1/32
+  >>    - 10.13.1.1/32
+      protocol: tcp
+      port: 69
+      appid: ssl
+      url: https://api.datadoghq.com
+  ```
 
 
 # Duplicate 5-tuple between rules within request example#3
@@ -126,7 +126,7 @@ rules:
     port: 69
     appid: ssl
     url: https://api.datadoghq.com
-	
+  
 ```
 
 
@@ -135,25 +135,25 @@ rules:
 🏛️ Duplicates detected in submitted policy
 
 ```yaml
-	  rules:
-		- request_id: RQ-001
-		  source:
-			ips:
-	>>    - 10.12.1.1/32
-	>>    - 10.13.1.1/32
-	>>  protocol: tcp
-	>>  port: 69
-	>>  appid: ssl
-	>>  url: https://api.datadoghq.com
-		- request_id: RQ-002
-		  source:
-			ips:
-	>>    - 10.12.1.1/32
-	>>    - 10.13.1.1/32
-	>>  protocol: tcp
-	>>  port: 69
-	>>  appid: ssl
-	>>  url: https://api.datadoghq.com
+    rules:
+    - request_id: RQ-001
+      source:
+      ips:
+  >>    - 10.12.1.1/32
+  >>    - 10.13.1.1/32
+  >>  protocol: tcp
+  >>  port: 69
+  >>  appid: ssl
+  >>  url: https://api.datadoghq.com
+    - request_id: RQ-002
+      source:
+      ips:
+  >>    - 10.12.1.1/32
+  >>    - 10.13.1.1/32
+  >>  protocol: tcp
+  >>  port: 69
+  >>  appid: ssl
+  >>  url: https://api.datadoghq.com
 ```
 
 # Duplicate 5-tuple between rules within request example#4
@@ -184,7 +184,7 @@ rules:
     port: 69
     appid: ssl
     url: https://api.datadoghq.com
-	
+  
 ```
 
 
@@ -193,25 +193,25 @@ rules:
 🏛️ Duplicates detected in submitted policy
 
 ```yaml
-	  rules:
-		- request_id: RQ-001
-		  source:
-			ips:
-	>>    - 10.12.1.1/32
-			  - 10.13.1.1/32
-		  protocol: tcp
-		  port: 69
-		  appid: ssl
-		  url: https://api.datadoghq.com
-		- request_id: RQ-002
-		  source:
-			ips:
-	>>    - 10.12.1.1/32
-			  - 10.15.1.1/32
-		  protocol: tcp
-		  port: 69
-		  appid: ssl
-		  url: https://api.datadoghq.com
+    rules:
+    - request_id: RQ-001
+      source:
+      ips:
+  >>    - 10.12.1.1/32
+        - 10.13.1.1/32
+      protocol: tcp
+      port: 69
+      appid: ssl
+      url: https://api.datadoghq.com
+    - request_id: RQ-002
+      source:
+      ips:
+  >>    - 10.12.1.1/32
+        - 10.15.1.1/32
+      protocol: tcp
+      port: 69
+      appid: ssl
+      url: https://api.datadoghq.com
 ```
 
 # Duplicate 5-tuple between rules within request example#5
