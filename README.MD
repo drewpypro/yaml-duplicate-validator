@@ -20,3 +20,4 @@ This repo contains scripts for detecting duplicate network policy rules in YAML 
 - Only works on YAML files in the expected format (see test cases for examples).
 - Output is designed to be human-readable and stable for CI checks.
 - Script exits non-zero on failure if used in pipelines.
+- Git Actions pipeline only runs on scripts and test files. 
