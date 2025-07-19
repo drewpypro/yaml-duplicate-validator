@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - 'yaml-duplicate-validator.py'
-      - 'duplicate_script_tester.py'
+      - 'yaml_duplicate_script_tester.py'
       - 'tests/**'
       - '.github/workflows/**'
 
@@ -28,4 +28,4 @@ jobs:
 
       - name: Run duplicate policy tests
         run: |
-          python3 duplicate_script_tester.py
+          python3 yaml_duplicate_script_tester.py
